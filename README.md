@@ -1,12 +1,16 @@
 # Retail-Sales-Prediction-ML-Regression
 
-# Business Use Case:
+Link to the Live Server of my Sales Predicting Application:
+
+https://retail-sales-prediction-ml-regression-dharmendra.streamlit.app/
+
+## Business Use Case:
 The business use case of this project is to leverage machine learning techniques to predict retail sales accurately. forecasting sales, retailers can optimize their operations, reduce costs, and enhance overall profitability.
 
-# Potential Impact:
+## Potential Impact:
 The potential impact of this project is significant for both retailers and the broader retail industry.
 
-# Approach:
+## Approach:
 
 -Dataset Explanation: The project used two datasets, 'rossmann_data' and 'store_data,' comprising a total of 1,017,209 entries and 18 columns. The integration of these datasets provided comprehensive information for sales prediction.
 
@@ -16,12 +20,12 @@ The potential impact of this project is significant for both retailers and the b
 
 -End Output: The end output of the project is a successfully deployed predictive model application capable of forecasting retail sales.
 
-# Challenges Faced:
+## Challenges Faced:
 -Handling Null Values was a difficult task as 4 of the features were having a high number of missing values. In order to handle this, I used median for the features having potential outliers and mean for the features not having outliers.
 
 -Computational Memory: The project encountered challenges related to computational memory, likely due to the large dataset size and complexity. Therefore, I switched to use simple ML models such as Linear regression, decision tree and random forest techniques.
 
-# Future Scope:
+## Future Scope:
 While the project has already achieved a significant milestone by deploying the best-performing model for live predictions, there are several avenues for further enhancement and expansion:
 -Continued Model Refinement: The journey to excellence in predictive accuracy is ongoing. We will continue to fine-tune our machine learning models, explore advanced algorithms, and optimize hyperparameters to further improve the precision of our sales predictions.
 
