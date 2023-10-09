@@ -100,7 +100,7 @@ if Open==1:
             # Making prediction
             result = model.predict(user_df)
 
-            st.write("Predicted Sales:  ", np.round(float(result),2))
+            st.write("Predicted Sales:  ", str(np.round(float(result),2)))
 
 else:
     st.write("No sales as Store is Closed")
