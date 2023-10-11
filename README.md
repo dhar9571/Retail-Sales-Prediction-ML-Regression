@@ -16,7 +16,7 @@ The potential impact of this project is significant for both retailers and the b
 
 -Feature Engineering: Data preprocessing involved handling missing values, outliers, and categorical encoding. Techniques like label encoding and feature manipulation were employed to create meaningful features. This step was crucial for preparing the data for machine learning modelling.
 
--Algorithms: Multiple machine learning algorithms were trained, including Linear Regression, Ridge, Lasso, ElasticNet, DecisionTree, and RandomForest Regression. Among them, the RandomForest Regression model demonstrated the best performance, achieving an accuracy of 92%.
+-Algorithms: Multiple machine learning algorithms were trained, including Linear Regression, Ridge, Lasso, ElasticNet, DecisionTree, and RandomForest Regression, XGBoost and Artificial Neural Networks. Among them, the XGBoost Regression model demonstrated the best performance, achieving an accuracy of 87%.
 
 -End Output: The end output of the project is a successfully deployed predictive model application capable of forecasting retail sales.
 
