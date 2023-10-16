@@ -1,16 +1,18 @@
 import pandas as pd
 import numpy as np
 import streamlit as st
-import pickle
+import joblib
+from datetime import date, datetime
+
+# Importing X_train object to know required columns:
+xgs = joblib.load(open('xggrid_s.joblib', 'rb'))
+xgc = joblib.load(open('xggrid_c.joblib', 'rb'))
 
 # Web App title
 st.title("Retail Sales Prediction")
 
 # Message
 st.write("Please enter the following information to predict sales:")
-
-# Importing X_train object to know required columns:
-X_train = pickle.load(open('X_train.pkl', 'rb'))
 
 # Display a select box for the user to choose from
 Open = st.selectbox("Select Store Status:", ['Open', 'Closed'])
@@ -21,7 +23,30 @@ else:
     Open=0
 
 if Open==1:
-    DayOfWeek = st.selectbox('Select Day of the Week:', sorted(X_train['DayOfWeek'].unique()))
+
+    # Set the minimum and maximum selectable dates
+    min_date = date(2013, 1, 1)
+    max_date = date.today()
+
+    # Add a date selection widget
+    selected_date = str(st.date_input("Select a date:", min_value=min_date, max_value=max_date, value=min_date))
+
+    # Convert the input string to a datetime object
+    date_obj = datetime.strptime(selected_date, '%Y-%m-%d')
+
+    # Get the day of the week as an integer (0 = Monday, 6 = Sunday)
+    DayOfWeek = date_obj.weekday()+1
+
+    if DayOfWeek==8:
+        DayOfWeek=1
+
+    date1 = selected_date.split("-")
+    Day = int(date1[2])
+    Month = int(date1[1])
+    Year = int(date1[0])
+
+    selected_date = pd.to_datetime(selected_date)
+    selected_date = selected_date.timestamp()
 
     Promo = st.selectbox('Select Promotion Status:', ["Yes", "No"])
 
@@ -68,7 +93,18 @@ if Open==1:
         Assortment_c = 1
 
     # Get an integer input from the user
-    Customers = st.number_input("Please enter the number of customers", step=1)
+    CompetitionDistance = st.number_input("Please enter the distance of nearest Competitor Store", step=1)
+    CompetitionDistance = round(CompetitionDistance)
+
+    customers = int(xgc.predict([[selected_date,Day,Month,Year,Open,DayOfWeek,Promo,
+                              StateHoliday,SchoolHoliday, StoreType_b,StoreType_c,
+                              StoreType_d,Assortment_b,Assortment_c,CompetitionDistance]]))
+
+    sales = np.around(xgs.predict([[selected_date,Day,Month,Year,Open,DayOfWeek,Promo,
+                              StateHoliday,SchoolHoliday, StoreType_b,StoreType_c,
+                              StoreType_d,Assortment_b,Assortment_c,customers,CompetitionDistance]]),
+                      decimals=2)
+
 
     button_style = """
         <style>
@@ -84,23 +120,10 @@ if Open==1:
 
     if st.button("Predict"):
 
-        if Customers == 0:
-            st.write("No Sales when Customers are 0")
-        else:
-            user_dict = {"Open": [Open], "DayOfWeek": [DayOfWeek], "Promo": [Promo], "StateHoliday": [StateHoliday],
-                         "SchoolHoliday": [SchoolHoliday], "StoreType_b": [StoreType_b], "StoreType_c": [StoreType_c],
-                         "StoreType_d": [StoreType_d], "Assortment_b": [Assortment_b], "Assortment_c": [Assortment_c],
-                         "Customers": [Customers]}
+        st.write(f'Expected Customers: {str(customers)}')
+        st.write(f'Expected Sales: {str(int(sales))}')
 
-            user_df = pd.DataFrame(user_dict)
 
-            # Importing trained XGBoost model object:
-            model = pickle.load(open('xggrid.pkl', 'rb'))
-
-            # Making prediction
-            result = model.predict(user_df)
-
-            st.write("Predicted Sales:  ", str(np.round(float(result),2)))
 
 else:
-    st.write("No sales as Store is Closed")
+    st.write("No Sales and Customers as store status is Closed")
